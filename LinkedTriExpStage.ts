@@ -93,7 +93,7 @@ class TriExpNode {
         }
     }
 
-    draw(context) {
+    draw(context : CanvasRenderingContext2D) {
         const i1 : number = this.i%2, i2 : number = (this.i + 1) % 2
         const gap = w / NODES
         context.save()
@@ -108,15 +108,15 @@ class TriExpNode {
         context.restore()
     }
 
-    update(stopcb) {
+    update(stopcb : Function) {
         this.state.update(stopcb)
     }
 
-    startUpdating(startcb) {
+    startUpdating(startcb : Function) {
         this.state.startUpdating(startcb)
     }
 
-    getNext(dir, cb) {
+    getNext(dir : number, cb : Function) {
         var curr = this.prev
         if (dir == 1) {
             curr = this.next
@@ -126,5 +126,29 @@ class TriExpNode {
         }
         cb()
         return this
+    }
+}
+
+class LinkedTriExp {
+
+    curr : TriExpNode = new TriExpNode(0)
+
+    dir : number = 1
+
+    draw(context : CanvasRenderingContext2D) {
+        this.curr.draw(context)
+    }
+
+    update(stopcb : Function) {
+        this.curr.update(() => {
+            this.curr = this.curr.getNext(this.dir, () => {
+                this.dir *= -1
+            })
+            stopcb()
+        })
+    }
+
+    startUpdating(startcb : Function) {
+        this.curr.startUpdating(startcb)
     }
 }
