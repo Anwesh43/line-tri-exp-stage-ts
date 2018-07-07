@@ -119,12 +119,13 @@ class TriExpNode {
         const gap = w / NODES
         context.save()
         context.translate(this.i * gap, h/2)
-        const scales : Array<number> = [Math.min(0.5, this.state.scale), Math.min(0.5, Math.max(0, this.state.scale - 0.5))]
+        const scales : Array<number> = [Math.min(0.5, this.state.scale) * 2, 2 * Math.min(0.5, Math.max(0, this.state.scale - 0.5))]
         const hGap : number = (i1 * scales[0] + (1 - scales[1]) * i2) * gap/2
         context.beginPath()
         context.moveTo(gap * scales[i1], 0)
         context.lineTo(gap * scales[i2], hGap)
         context.lineTo(gap * scales[i2], -hGap)
+        context.lineTo(gap * scales[i1], 0)
         context.stroke()
         context.restore()
     }
