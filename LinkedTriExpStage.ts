@@ -73,3 +73,58 @@ class Animator {
         }
     }
 }
+
+class TriExpNode {
+
+    state : State = new State()
+
+    next : TriExpNode
+
+    prev : TriExpNode
+
+    constructor(private i : number) {
+        this.addNeighbor()
+    }
+
+    addNeighbor() {
+        if (this.i < NODES - 1) {
+            this.next = new TriExpNode(this.i + 1)
+            this.next.prev = this
+        }
+    }
+
+    draw(context) {
+        const i1 : number = this.i%2, i2 : number = (this.i + 1) % 2
+        const gap = w / NODES
+        context.save()
+        context.translate(this.i * gap, h/2)
+        const scales : Array<number> = [Math.min(0.5, this.state.scale), Math.min(0.5, Math.max(0, this.state.scale - 0.5))]
+        const hGap : number = (i1 * scales[0] + (1 - scales[1]) * i2) * gap/2
+        context.beginPath()
+        context.moveTo(gap * scales[i1], 0)
+        context.lineTo(gap * scales[i2], hGap)
+        context.lineTo(gap * scales[i2], -hGap)
+        context.stroke()
+        context.restore()
+    }
+
+    update(stopcb) {
+        this.state.update(stopcb)
+    }
+
+    startUpdating(startcb) {
+        this.state.startUpdating(startcb)
+    }
+
+    getNext(dir, cb) {
+        var curr = this.prev
+        if (dir == 1) {
+            curr = this.next
+        }
+        if (curr) {
+            return curr
+        }
+        cb()
+        return this
+    }
+}
