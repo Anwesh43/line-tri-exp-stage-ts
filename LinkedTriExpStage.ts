@@ -4,6 +4,10 @@ class LinkedTriExpStage {
 
     context : CanvasRenderingContext2D
 
+    lte : LinkedTriExp = new LinkedTriExp()
+
+    animator : Animator = new Animator()
+
     constructor() {
         this.initCanvas()
     }
@@ -18,11 +22,19 @@ class LinkedTriExpStage {
     render() {
         this.context.fillStyle = '#212121'
         this.context.fillRect(0, 0, w, h)
+        this.lte.draw(this.context)
     }
 
     handleTap() {
         this.canvas.onmousedown = () => {
-
+            this.lte.startUpdating(() => {
+                this.animator.start(() => {
+                    this.render()
+                    this.lte.update(() => {
+                        this.animator.stop()
+                    })
+                })
+            })
         }
     }
 }
