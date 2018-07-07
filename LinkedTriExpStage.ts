@@ -37,6 +37,12 @@ class LinkedTriExpStage {
             })
         }
     }
+
+    static init() {
+        const stage : LinkedTriExpStage = new LinkedTriExpStage()
+        stage.render()
+        stage.handleTap()
+    }
 }
 
 class State {
