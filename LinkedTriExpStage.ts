@@ -112,6 +112,9 @@ class TriExpNode {
     }
 
     draw(context : CanvasRenderingContext2D) {
+        context.lineWidth = Math.min(w, h) / 60
+        context.lineCap = 'round'
+        context.strokeStyle = '#FF9800'
         const i1 : number = this.i%2, i2 : number = (this.i + 1) % 2
         const gap = w / NODES
         context.save()
